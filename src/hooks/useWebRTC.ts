@@ -42,11 +42,16 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
           { urls: 'stun:stun1.l.google.com:19302' },
           { urls: 'stun:stun2.l.google.com:19302' },
           { urls: 'stun:stun3.l.google.com:19302' },
-          ...(process.env.NEXT_PUBLIC_TURN_URL ? [{
-            urls: process.env.NEXT_PUBLIC_TURN_URL,
-            username: process.env.NEXT_PUBLIC_TURN_USERNAME || '',
-            credential: process.env.NEXT_PUBLIC_TURN_CREDENTIAL || '',
-          }] : []),
+          {
+            urls: 'turn:openrelay.metered.ca:80',
+            username: 'openrelayproject',
+            credential: 'openrelayproject',
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443',
+            username: 'openrelayproject',
+            credential: 'openrelayproject',
+          },
         ],
       },
     });

@@ -143,13 +143,15 @@ export function useSocket() {
   useEffect(() => {
     if (!user || !token) return;
 
+    const isProduction = typeof window !== 'undefined' && window.location.protocol === 'https:';
     const socket = io({
       auth: { token },
-      transports: ['websocket', 'polling'],
+      transports: isProduction ? ['polling'] : ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 30000,
       reconnectionAttempts: maxReconnectAttempts,
+      upgrade: !isProduction,
     });
 
     socketRef.current = socket;

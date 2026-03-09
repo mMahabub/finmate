@@ -186,9 +186,19 @@ export default function ActiveCall({
     scheduleHide();
   }, [callType, scheduleHide]);
 
+  const isRinging = connectionState === 'ringing';
   const isConnecting = connectionState === 'connecting';
   const isFailed = connectionState === 'failed';
-  const statusText = isFailed ? 'Call failed - network issue' : isConnecting ? 'Connecting...' : formatDuration(duration);
+  const isClosed = connectionState === 'closed';
+  const statusText = isFailed
+    ? 'Call failed - network issue'
+    : isClosed
+      ? 'Call ended'
+      : isRinging
+        ? 'Ringing...'
+        : isConnecting
+          ? 'Connecting...'
+          : formatDuration(duration);
 
   // ---- Audio Call Layout ----
   if (callType === 'audio') {

@@ -47,6 +47,8 @@ export default function VoicePlayer({ url, duration, isSent }: VoicePlayerProps)
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animFrameRef = useRef<number>(0);
 
+  const isLegacyUrl = url.startsWith('/uploads/');
+
   const bars = useMemo(() => {
     const hash = hashString(url);
     const rng = seededRandom(Math.abs(hash));
@@ -54,6 +56,7 @@ export default function VoicePlayer({ url, duration, isSent }: VoicePlayerProps)
   }, [url]);
 
   useEffect(() => {
+    if (isLegacyUrl) return;
     const audio = new Audio(url);
     audioRef.current = audio;
 
@@ -70,9 +73,10 @@ export default function VoicePlayer({ url, duration, isSent }: VoicePlayerProps)
         cancelAnimationFrame(animFrameRef.current);
       }
     };
-  }, [url]);
+  }, [url, isLegacyUrl]);
 
   useEffect(() => {
+    if (isLegacyUrl) return;
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -92,7 +96,34 @@ export default function VoicePlayer({ url, duration, isSent }: VoicePlayerProps)
         cancelAnimationFrame(animFrameRef.current);
       }
     };
-  }, [isPlaying]);
+  }, [isPlaying, isLegacyUrl]);
+
+  // Old voice messages stored on ephemeral filesystem are gone after redeploy
+  if (isLegacyUrl) {
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 10, width: 250,
+        padding: '8px 12px', opacity: 0.5,
+      }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+          backgroundColor: isSent ? 'rgba(255,255,255,0.2)' : 'var(--color-accent-primary, #6366f1)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </div>
+        <span style={{
+          fontSize: 12,
+          color: isSent ? 'rgba(255,255,255,0.6)' : 'var(--color-text-secondary, #6b7280)',
+          fontStyle: 'italic',
+        }}>
+          Voice message unavailable
+        </span>
+      </div>
+    );
+  }
 
   const togglePlay = () => {
     const audio = audioRef.current;

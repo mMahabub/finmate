@@ -3,6 +3,8 @@
 import { usePathname } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { SocketProvider } from '@/context/SocketContext';
+import { CallProvider } from '@/context/CallContext';
+import CallOverlay from '@/components/chat/CallOverlay';
 import { AppShell } from './AppShell';
 import { SplashScreen } from '@/components/ui/SplashScreen';
 
@@ -19,7 +21,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <SocketProvider>
-      {isAuthPage ? children : <AppShell>{children}</AppShell>}
+      <CallProvider>
+        {isAuthPage ? children : <AppShell>{children}</AppShell>}
+        <CallOverlay />
+      </CallProvider>
     </SocketProvider>
   );
 }

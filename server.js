@@ -78,12 +78,14 @@ app.prepare().then(() => {
 
   const io = new Server(server, {
     cors: {
-      origin: dev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_APP_URL,
+      origin: dev ? 'http://localhost:3000' : (process.env.NEXT_PUBLIC_APP_URL || 'https://finmate-yx36.onrender.com'),
       methods: ['GET', 'POST'],
       credentials: true,
     },
+    transports: dev ? ['websocket', 'polling'] : ['polling'],
     pingTimeout: 60000,
     pingInterval: 25000,
+    allowUpgrades: dev,
   });
 
   // Authentication middleware

@@ -11,6 +11,7 @@ import ThemePicker from './ThemePicker';
 import WallpaperPicker from './WallpaperPicker';
 import { getThemeStyles, CHAT_THEMES } from '@/lib/chatThemes';
 import { getWallpaperStyles, getWallpaperCSS } from '@/lib/chatWallpapers';
+import { useCallContext } from '@/context/CallContext';
 
 // ---------- Types ----------
 
@@ -122,6 +123,8 @@ export default function ChatWindow({ conversation, onBack, currentUserId, curren
     onNewMessage, onMessageEdited, onMessageDeleted,
     onReactionUpdated, onMessagesRead,
   } = useSocketContext();
+
+  const { makeCall: initiateCall } = useCallContext();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasMore, setHasMore] = useState(false);
@@ -516,6 +519,15 @@ export default function ChatWindow({ conversation, onBack, currentUserId, curren
               aria-label="Audio Call"
               title="Audio Call"
               disabled={!isOnline}
+              onClick={() => {
+                if (otherMember && isOnline) {
+                  initiateCall(otherMember.id, 'audio', conversation.id, {
+                    id: otherMember.id,
+                    name: otherMember.name,
+                    avatar_url: otherMember.avatar_url,
+                  });
+                }
+              }}
               style={{
                 width: 36, height: 36, borderRadius: 10, display: 'flex',
                 alignItems: 'center', justifyContent: 'center', padding: 0,
@@ -531,6 +543,15 @@ export default function ChatWindow({ conversation, onBack, currentUserId, curren
               aria-label="Video Call"
               title="Video Call"
               disabled={!isOnline}
+              onClick={() => {
+                if (otherMember && isOnline) {
+                  initiateCall(otherMember.id, 'video', conversation.id, {
+                    id: otherMember.id,
+                    name: otherMember.name,
+                    avatar_url: otherMember.avatar_url,
+                  });
+                }
+              }}
               style={{
                 width: 36, height: 36, borderRadius: 10, display: 'flex',
                 alignItems: 'center', justifyContent: 'center', padding: 0,

@@ -44,6 +44,7 @@ export interface CallManagerDeps {
   on: (event: string, handler: (...args: unknown[]) => void) => void;
   off: (event: string, handler: (...args: unknown[]) => void) => void;
   userId: string;
+  isConnected: boolean;
 }
 
 const initialCallState: CallState = {
@@ -99,9 +100,10 @@ export function useCallManager(deps: CallManagerDeps | null) {
 
   // ---- Public actions ----
 
-  const makeCall = useCallback((userId: string, callType: 'audio' | 'video', conversationId: string, remoteUser: { id: string; name: string; avatar_url: string | null }) => {
-    if (!deps) return;
-    if (callStateRef.current.status !== 'idle') return;
+  const makeCall = useCallback((userId: string, callType: 'audio' | 'video', conversationId: string, remoteUser: { id: string; name: string; avatar_url: string | null }): string | null => {
+    if (!deps) return 'not_ready';
+    if (!deps.isConnected) return 'not_connected';
+    if (callStateRef.current.status !== 'idle') return 'busy';
 
     const callId = `call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
@@ -130,6 +132,8 @@ export function useCallManager(deps: CallManagerDeps | null) {
         resetToIdle();
       }
     }, 30000);
+
+    return null; // success
   }, [deps, resetToIdle]);
 
   const acceptCall = useCallback(() => {
@@ -249,6 +253,14 @@ export function useCallManager(deps: CallManagerDeps | null) {
       setIsRemoteVideoOff(!data.enabled);
     };
 
+    // Dismiss incoming call if socket disconnects
+    const handleDisconnect = () => {
+      if (callStateRef.current.status === 'ringing' && callStateRef.current.isIncoming) {
+        setCallState(prev => ({ ...prev, status: 'ended' }));
+        resetToIdle();
+      }
+    };
+
     deps.on('incoming_call', handleIncomingCall);
     deps.on('call_accepted', handleCallAccepted);
     deps.on('call_declined', handleCallDeclined);
@@ -259,6 +271,7 @@ export function useCallManager(deps: CallManagerDeps | null) {
     deps.on('webrtc_ice_candidate', handleWebRTCIceCandidate);
     deps.on('remote_audio_toggle', handleRemoteAudioToggle);
     deps.on('remote_video_toggle', handleRemoteVideoToggle);
+    deps.on('disconnect', handleDisconnect);
 
     return () => {
       deps.off('incoming_call', handleIncomingCall);
@@ -271,6 +284,7 @@ export function useCallManager(deps: CallManagerDeps | null) {
       deps.off('webrtc_ice_candidate', handleWebRTCIceCandidate);
       deps.off('remote_audio_toggle', handleRemoteAudioToggle);
       deps.off('remote_video_toggle', handleRemoteVideoToggle);
+      deps.off('disconnect', handleDisconnect);
     };
   }, [deps, clearTimers, resetToIdle]);
 
