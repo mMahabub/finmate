@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest } from '@/lib/apiAuth';
-import { randomUUID } from 'crypto';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
 
 export async function POST(request: NextRequest) {
   const auth = await authenticateRequest(request);
@@ -22,23 +19,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 });
     }
 
-    const uuid = randomUUID();
-    const ext = file.type.includes('webm') ? 'webm' : file.type.includes('mp4') ? 'mp4' : 'ogg';
-    const filename = `${uuid}.${ext}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'voice');
-
-    // Ensure directory exists
-    await mkdir(uploadDir, { recursive: true });
-
+    // Convert to base64 data URI
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(uploadDir, filename), buffer);
+    const base64 = buffer.toString('base64');
+    const mimeType = file.type || 'audio/webm';
+    const dataUri = `data:${mimeType};base64,${base64}`;
 
     return NextResponse.json({
-      url: `/uploads/voice/${filename}`,
+      url: dataUri,
       duration: Math.round(duration),
     });
   } catch (error) {
     console.error('Voice upload error:', error);
-    return NextResponse.json({ error: 'Failed to upload voice message' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process voice message' }, { status: 500 });
   }
 }

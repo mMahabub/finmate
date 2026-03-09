@@ -187,7 +187,8 @@ export default function ActiveCall({
   }, [callType, scheduleHide]);
 
   const isConnecting = connectionState === 'connecting';
-  const statusText = isConnecting ? 'Connecting...' : formatDuration(duration);
+  const isFailed = connectionState === 'failed';
+  const statusText = isFailed ? 'Call failed - network issue' : isConnecting ? 'Connecting...' : formatDuration(duration);
 
   // ---- Audio Call Layout ----
   if (callType === 'audio') {

@@ -29,6 +29,7 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
   }, [onError]);
 
   const signalCallbackRef = useRef<((data: Peer.SignalData) => void) | null>(null);
+  const connectionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const createPeer = useCallback((initiator: boolean, stream: MediaStream) => {
     const peer = new Peer({
@@ -39,6 +40,13 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:stun3.l.google.com:19302' },
+          ...(process.env.NEXT_PUBLIC_TURN_URL ? [{
+            urls: process.env.NEXT_PUBLIC_TURN_URL,
+            username: process.env.NEXT_PUBLIC_TURN_USERNAME || '',
+            credential: process.env.NEXT_PUBLIC_TURN_CREDENTIAL || '',
+          }] : []),
         ],
       },
     });
@@ -52,6 +60,10 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
     });
 
     peer.on('connect', () => {
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current);
+        connectionTimeoutRef.current = null;
+      }
       onConnectionStateChange('connected');
     });
 
@@ -73,8 +85,20 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
     const stream = await getLocalStream(video);
     if (!stream) return null;
     onConnectionStateChange('connecting');
-    return createPeer(true, stream);
-  }, [getLocalStream, createPeer, onConnectionStateChange]);
+    const peer = createPeer(true, stream);
+
+    // 15-second connection timeout
+    if (connectionTimeoutRef.current) clearTimeout(connectionTimeoutRef.current);
+    connectionTimeoutRef.current = setTimeout(() => {
+      if (peerRef.current && !peerRef.current.connected) {
+        onError(new Error('Connection timeout - network issue'));
+        onConnectionStateChange('failed');
+        peerRef.current.destroy();
+      }
+    }, 15000);
+
+    return peer;
+  }, [getLocalStream, createPeer, onConnectionStateChange, onError]);
 
   const answerCall = useCallback(async (video: boolean, incomingSignal: Peer.SignalData, onSignal: (data: Peer.SignalData) => void) => {
     signalCallbackRef.current = onSignal;
@@ -83,14 +107,29 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
     onConnectionStateChange('connecting');
     const peer = createPeer(false, stream);
     peer.signal(incomingSignal);
+
+    // 15-second connection timeout
+    if (connectionTimeoutRef.current) clearTimeout(connectionTimeoutRef.current);
+    connectionTimeoutRef.current = setTimeout(() => {
+      if (peerRef.current && !peerRef.current.connected) {
+        onError(new Error('Connection timeout - network issue'));
+        onConnectionStateChange('failed');
+        peerRef.current.destroy();
+      }
+    }, 15000);
+
     return peer;
-  }, [getLocalStream, createPeer, onConnectionStateChange]);
+  }, [getLocalStream, createPeer, onConnectionStateChange, onError]);
 
   const handleSignal = useCallback((data: Peer.SignalData) => {
     peerRef.current?.signal(data);
   }, []);
 
   const endCall = useCallback(() => {
+    if (connectionTimeoutRef.current) {
+      clearTimeout(connectionTimeoutRef.current);
+      connectionTimeoutRef.current = null;
+    }
     peerRef.current?.destroy();
     peerRef.current = null;
     localStreamRef.current?.getTracks().forEach(t => t.stop());
@@ -141,6 +180,7 @@ export function useWebRTC({ onRemoteStream, onConnectionStateChange, onError }: 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      if (connectionTimeoutRef.current) clearTimeout(connectionTimeoutRef.current);
       peerRef.current?.destroy();
       localStreamRef.current?.getTracks().forEach(t => t.stop());
     };

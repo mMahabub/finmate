@@ -71,12 +71,12 @@ export default function WallpaperPicker({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await apiFetch<{ filename: string }>('/api/upload/wallpaper', {
+      const response = await apiFetch<{ url: string; filename: string }>('/api/upload/wallpaper', {
         method: 'POST',
         body: formData,
       });
 
-      setSelectedWallpaper(`custom:${response.filename}`);
+      setSelectedWallpaper(`custom:${response.url}`);
     } catch {
       // silently fail
     } finally {
