@@ -36,7 +36,7 @@ export function DataBackup({ expenses, budgets, currency, onRestore }: DataBacku
           onRestore(data.expenses, data.budgets, data.currency);
         }
       } else {
-        alert('Invalid backup file. Please select a valid ExpenseTracker backup JSON file.');
+        alert('Invalid backup file. Please select a valid FinMate backup JSON file.');
       }
     };
     reader.readAsText(file);

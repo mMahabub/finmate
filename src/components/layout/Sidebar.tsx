@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useThemeContext } from './AppShell';
 import { useSocketContext } from '@/context/SocketContext';
+import { FinMateLogo } from '@/components/ui/FinMateLogo';
 
 interface NavItem {
   href: string;
@@ -116,21 +117,8 @@ export function Sidebar() {
       style={{ background: 'var(--sidebar-bg)', backdropFilter: 'blur(24px)' }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-6">
-        <div
-          className="flex-shrink-0 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25"
-          style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #6366f1, #9333ea)' }}
-        >
-          <span className="text-white font-bold text-lg">$</span>
-        </div>
-        <div>
-          <h1 className="font-heading font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
-            ExpenseTracker
-          </h1>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Personal Finance
-          </p>
-        </div>
+      <div className="px-6 py-6">
+        <FinMateLogo size="md" />
       </div>
 
       {/* Grouped navigation */}

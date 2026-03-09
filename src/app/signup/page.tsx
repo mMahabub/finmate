@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { FinMateLogo } from '@/components/ui/FinMateLogo';
 
 export default function SignupPage() {
   const { signup } = useAuth();
@@ -70,18 +71,18 @@ export default function SignupPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-indigo-500/25"
+            className="flex justify-center mb-5"
           >
-            <span className="text-white font-bold text-2xl">$</span>
+            <FinMateLogo size="lg" showText={false} />
           </motion.div>
           <h1
             className="text-2xl font-heading font-bold"
             style={{ color: 'var(--text-primary)' }}
           >
-            Create Account
+            Join FinMate
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-            Start tracking your expenses today
+            Your Financial Companion
           </p>
         </div>
 

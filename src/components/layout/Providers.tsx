@@ -1,21 +1,33 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { SocketProvider } from '@/context/SocketContext';
 import { AppShell } from './AppShell';
+import { SplashScreen } from '@/components/ui/SplashScreen';
 
 const AUTH_PAGES = ['/login', '/signup', '/forgot-password', '/reset-password'];
 
-export function Providers({ children }: { children: React.ReactNode }) {
+function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { loading } = useAuth();
   const isAuthPage = AUTH_PAGES.includes(pathname);
 
+  if (loading && !isAuthPage) {
+    return <SplashScreen />;
+  }
+
+  return (
+    <SocketProvider>
+      {isAuthPage ? children : <AppShell>{children}</AppShell>}
+    </SocketProvider>
+  );
+}
+
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <SocketProvider>
-        {isAuthPage ? children : <AppShell>{children}</AppShell>}
-      </SocketProvider>
+      <AppContent>{children}</AppContent>
     </AuthProvider>
   );
 }

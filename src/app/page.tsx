@@ -93,7 +93,7 @@ export default function DashboardPage() {
           </svg>
         </motion.div>
         <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-2xl font-heading font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
-          Welcome to ExpenseTracker
+          Welcome to FinMate
         </motion.h2>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--text-secondary)' }}>
           Start tracking your expenses to see spending insights and analytics here.

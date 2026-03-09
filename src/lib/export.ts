@@ -109,7 +109,7 @@ ${Array.from(categoryTotals.entries())
     </tr>
   </tbody>
 </table>
-<div class="footer">ExpenseTracker &middot; Expense Report</div>
+<div class="footer">FinMate &middot; Expense Report</div>
 </body>
 </html>`;
 
@@ -135,7 +135,7 @@ export function exportBackupJSON(
   };
   const json = JSON.stringify(backup, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
-  downloadBlob(blob, `expense-tracker-backup-${format(new Date(), 'yyyy-MM-dd')}.json`);
+  downloadBlob(blob, `finmate-backup-${format(new Date(), 'yyyy-MM-dd')}.json`);
 }
 
 export function parseBackupJSON(jsonString: string): AppBackupData | null {

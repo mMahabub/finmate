@@ -16,8 +16,20 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'ExpenseTracker - Manage Your Finances',
-  description: 'A modern expense tracking application to help you manage your personal finances.',
+  title: {
+    default: 'FinMate - Your Financial Companion',
+    template: '%s | FinMate',
+  },
+  description: 'Track expenses, chat with friends, split bills, and manage your finances smarter.',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
+  openGraph: {
+    title: 'FinMate - Your Financial Companion',
+    description: 'Track expenses, chat with friends, split bills, and manage your finances smarter.',
+    siteName: 'FinMate',
+  },
 };
 
 export default function RootLayout({

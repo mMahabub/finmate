@@ -28,7 +28,7 @@ function getPageTitle(pathname: string): string {
   if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
   if (pathname.startsWith('/expenses/')) return 'Expense Details';
   if (pathname.startsWith('/chat/')) return 'Chat';
-  return 'ExpenseTracker';
+  return 'FinMate';
 }
 
 export function TopHeader() {
@@ -43,6 +43,11 @@ export function TopHeader() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const pageTitle = getPageTitle(pathname);
+
+  // Update browser tab title
+  useEffect(() => {
+    document.title = pageTitle === 'FinMate' ? 'FinMate - Your Financial Companion' : `${pageTitle} | FinMate`;
+  }, [pageTitle]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
