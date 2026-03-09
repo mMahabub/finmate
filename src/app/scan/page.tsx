@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '@/lib/apiClient';
 import { useToastContext } from '@/components/ui/ToastContainer';
+import { useGamificationContext } from '@/components/layout/AppShell';
 import { CATEGORIES, CATEGORY_ICONS, CATEGORY_COLORS } from '@/lib/constants';
 import { Category } from '@/types/expense';
 import Link from 'next/link';
@@ -25,6 +26,7 @@ interface ScanResult {
 export default function ScanReceiptPage() {
   const router = useRouter();
   const { addToast } = useToastContext();
+  const { checkGamification } = useGamificationContext();
 
   const [step, setStep] = useState<'upload' | 'scanning' | 'results'>('upload');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -107,6 +109,7 @@ export default function ScanReceiptPage() {
         }),
       });
       addToast('Expense added successfully', 'success');
+      checkGamification('receipt_scanned');
       setTimeout(() => router.push('/expenses'), 600);
     } catch {
       addToast('Failed to add expense', 'error');

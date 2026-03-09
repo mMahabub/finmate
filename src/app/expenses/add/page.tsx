@@ -7,6 +7,7 @@ import { useExpenses } from '@/hooks/useExpenses';
 import { useBudgets } from '@/hooks/useBudgets';
 import { ExpenseForm } from '@/components/expenses/ExpenseForm';
 import { useToastContext } from '@/components/ui/ToastContainer';
+import { useGamificationContext } from '@/components/layout/AppShell';
 import { formatCurrency } from '@/lib/formatCurrency';
 import Link from 'next/link';
 import { Category } from '@/types/expense';
@@ -16,6 +17,7 @@ export default function AddExpensePage() {
   const { addExpense } = useExpenses();
   const { summary: budgetSummary } = useBudgets();
   const { addToast } = useToastContext();
+  const { checkGamification } = useGamificationContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category>('Food');
 
@@ -37,6 +39,7 @@ export default function AddExpensePage() {
       }
 
       addToast('Expense added successfully', 'success');
+      checkGamification('expense_logged');
       setTimeout(() => router.push('/expenses'), 600);
     } catch {
       addToast('Failed to add expense', 'error');

@@ -23,6 +23,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/notifications': 'Notifications',
   '/settings': 'Settings',
   '/ai-assistant': 'AI Assistant',
+  '/achievements': 'Achievements',
 };
 
 function getPageTitle(pathname: string): string {

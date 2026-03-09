@@ -54,6 +54,7 @@ export function Sidebar() {
       label: 'AI',
       items: [
         { href: '/ai-assistant', label: 'AI Assistant', icon: SparkleNavIcon },
+        { href: '/achievements', label: 'Achievements', icon: TrophyIcon },
       ],
     },
   ];
@@ -231,6 +232,14 @@ function ScanIcon({ style }: { style?: React.CSSProperties }) {
     <svg width={20} height={20} style={style} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+    </svg>
+  );
+}
+
+function TrophyIcon({ style }: { style?: React.CSSProperties }) {
+  return (
+    <svg width={20} height={20} style={style} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.996.178-1.768-.767-1.605-1.71.084-.487.382-.924.785-1.19a3.001 3.001 0 011.306-.44M5.25 4.236V4.5c0 2.178.462 4.263 1.247 6.078M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.996.178 1.768-.767 1.605-1.71a2.252 2.252 0 00-.785-1.19 3.001 3.001 0 00-1.306-.44M18.75 4.236V4.5c0 2.178-.462 4.263-1.247 6.078" />
     </svg>
   );
 }
