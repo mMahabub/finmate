@@ -50,6 +50,12 @@ export function Sidebar() {
         { href: '/chat', label: 'Chat', icon: ChatIcon, badge: unreadChatCount },
       ],
     },
+    {
+      label: 'AI',
+      items: [
+        { href: '/ai-assistant', label: 'AI Assistant', icon: SparkleNavIcon },
+      ],
+    },
   ];
 
   const isActive = (href: string) => {
@@ -225,6 +231,25 @@ function ScanIcon({ style }: { style?: React.CSSProperties }) {
     <svg width={20} height={20} style={style} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+    </svg>
+  );
+}
+
+function SparkleNavIcon({ style }: { style?: React.CSSProperties }) {
+  return (
+    <svg width={20} height={20} style={style} viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19 14L19.75 16.25L22 17L19.75 17.75L19 20L18.25 17.75L16 17L18.25 16.25L19 14Z"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

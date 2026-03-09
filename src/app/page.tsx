@@ -13,6 +13,7 @@ import { BudgetSummaryCard } from '@/components/dashboard/BudgetSummaryCard';
 import { useBudgets } from '@/hooks/useBudgets';
 import { apiFetch } from '@/lib/apiClient';
 import { formatCurrency } from '@/lib/formatCurrency';
+import { AIInsightCard } from '@/components/dashboard/AIInsightCard';
 
 interface UpcomingBill {
   id: string;
@@ -153,6 +154,8 @@ export default function DashboardPage() {
         dailyAverage={summary.dailyAverage}
         topCategory={summary.topCategory}
       />
+
+      <AIInsightCard />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <BudgetSummaryCard budget={budgetSummary} />

@@ -233,6 +233,63 @@ export default function SettingsPage() {
         </div>
       </motion.div>
 
+      {/* AI Assistant Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.08 }}
+        className="glass-card p-6 space-y-5"
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="flex-shrink-0 rounded-lg flex items-center justify-center"
+            style={{
+              width: 32,
+              height: 32,
+              background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+            }}
+          >
+            <svg width={16} height={16} viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="white" opacity="0.9" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-heading font-semibold" style={{ color: 'var(--text-primary)' }}>
+            AI Assistant
+          </h2>
+        </div>
+
+        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          FinMate AI uses Google Gemini to provide personalized financial advice. Without an API key, you&apos;ll still get
+          smart insights from your spending data.
+        </p>
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+            Gemini API Key
+          </label>
+          <div className="glass-input w-full px-4 py-3 text-sm flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+            <svg width={14} height={14} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            <span>Configured via server environment variable</span>
+          </div>
+          <p className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>
+            Add <code className="px-1.5 py-0.5 rounded text-xs" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>GEMINI_API_KEY=your_key</code> to
+            your <code className="px-1.5 py-0.5 rounded text-xs" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>.env.local</code> file.
+            Get a free key at{' '}
+            <a
+              href="https://aistudio.google.com/apikey"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium"
+              style={{ color: 'var(--accent-primary)' }}
+            >
+              Google AI Studio
+            </a>
+          </p>
+        </div>
+      </motion.div>
+
       {/* Change Password Section */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}

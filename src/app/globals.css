@@ -101,6 +101,21 @@ body {
     transform: scale(0.97);
   }
 
+  .ai-markdown strong {
+    font-weight: 600;
+  }
+  .ai-markdown ul {
+    list-style-type: disc;
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+  }
+  .ai-markdown li {
+    margin: 0.25rem 0;
+  }
+  .ai-markdown em {
+    font-style: italic;
+  }
+
   .skeleton {
     background: linear-gradient(
       90deg,

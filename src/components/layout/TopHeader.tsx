@@ -22,6 +22,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/chat': 'Chat',
   '/notifications': 'Notifications',
   '/settings': 'Settings',
+  '/ai-assistant': 'AI Assistant',
 };
 
 function getPageTitle(pathname: string): string {
